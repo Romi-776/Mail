@@ -21,7 +21,42 @@ function compose_email() {
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
 
-  
+  document.querySelector("#compose-form").onsubmit = () => {
+    // Getting name of recipient, email body and subject
+    let recipient = document.querySelector('#compose-recipients');
+    let email_subject = document.querySelector('#compose-subject');
+    let email_body = document.querySelector('#compose-body');
+
+    // When the user doesn't input a recipient name 
+    // or subject or body
+    if (recipient.value.length <= 0) {
+      alert("Enter Recipient Email ID!");
+    }
+    else if (email_subject.value.length <= 0) {
+      alert("Enter Subject of the mail!");  
+    }
+    else if (email_body.value.length <= 0) {
+      alert("Enter Body of the mail!");
+    }
+    // if all the fields are give
+    else 
+    {
+      fetch("/emails", {
+        method: 'POST',
+        body: JSON.stringify({
+          recipients: recipient,
+          subject: email_subject,
+          body: email_body
+        })
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log(result)
+          load_mailbox("sent");
+      }) 
+    }  
+    
+  }
 }
 
 function load_mailbox(mailbox) {

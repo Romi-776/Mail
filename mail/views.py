@@ -177,3 +177,6 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "mail/register.html")
+
+def hello(request):
+    return HttpResponse("HELLO")
