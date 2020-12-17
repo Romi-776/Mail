@@ -38,21 +38,22 @@ function compose_email() {
     else if (email_body.value.length <= 0) {
       alert("Enter Body of the mail!");
     }
-    // if all the fields are give
+    // if all the fields are given
     else 
     {
+      // sending te
       fetch("/emails", {
         method: 'POST',
         body: JSON.stringify({
-          recipients: recipient,
-          subject: email_subject,
-          body: email_body
+          recipients: `${recipient}`,
+          subject: `${email_subject}`,
+          body: `${email_body}`
         })
       })
         .then(response => response.json())
         .then(result => {
           console.log(result)
-          load_mailbox("sent");
+          load_mailbox('sent');
       }) 
     }  
     
@@ -67,4 +68,10 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch(`/emails/${mailbox}`)
+    .then(response => response.json())
+    .then(emails => {
+      console.log(emails)
+    })
 }

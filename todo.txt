@@ -1,2 +1,4 @@
-I am writing the code but the browser is not updating or showing it.
-Fix this issue and check the implementation of sending email to others.
+Now email sending and receiving is working via the console but 
+when I try to send it through the form on the site, its not 
+working.
+Fix this issue.
