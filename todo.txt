@@ -1,4 +1,3 @@
-Now email sending and receiving is working via the console but 
-when I try to send it through the form on the site, its not 
-working.
-Fix this issue.
+Now Email sending feature is working.
+But it can't catch an email that's not registered it is only showing that in 
+console so need to work on this. 

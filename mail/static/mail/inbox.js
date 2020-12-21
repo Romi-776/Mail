@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+
 function compose_email() {
 
   // Show compose view and hide other views
@@ -21,43 +22,57 @@ function compose_email() {
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
 
-  document.querySelector("#compose-form").onsubmit = () => {
+  document.querySelector("#compose-form").onsubmit = (event) => {
+    event.preventDefault();
     // Getting name of recipient, email body and subject
-    let recipient = document.querySelector('#compose-recipients');
-    let email_subject = document.querySelector('#compose-subject');
-    let email_body = document.querySelector('#compose-body');
+    const recipient = document.querySelector('#compose-recipients');
+    const email_subject = document.querySelector('#compose-subject');
+    const email_body = document.querySelector('#compose-body');
 
     // When the user doesn't input a recipient name 
     // or subject or body
-    if (recipient.value.length <= 0) {
-      alert("Enter Recipient Email ID!");
-    }
-    else if (email_subject.value.length <= 0) {
-      alert("Enter Subject of the mail!");  
-    }
-    else if (email_body.value.length <= 0) {
-      alert("Enter Body of the mail!");
-    }
-    // if all the fields are given
-    else 
-    {
-      // sending te
-      fetch("/emails", {
-        method: 'POST',
-        body: JSON.stringify({
-          recipients: `${recipient}`,
-          subject: `${email_subject}`,
-          body: `${email_body}`
-        })
-      })
-        .then(response => response.json())
-        .then(result => {
-          console.log(result)
-          load_mailbox('sent');
-      }) 
-    }  
-    
+    if (!checkDetails(recipient, email_subject, email_body))
+      return false;
+    else
+      load_mailbox("sent");
   }
+}
+
+function checkDetails(recipients, subject, body)
+{
+  if (recipients.value.length <= 0) {
+    alert("Enter Recipient(s) ID!");
+    return false;
+  }
+  else if (subject.value.length <= 0) {
+    alert("Enter Mail Subject");
+    return false;
+  }
+  else if (body.value.length <= 0){
+    alert("Enter Mail Body!");
+    return false;
+  }
+  
+  return sendMail(recipients.value, subject.value, body.value);
+}
+
+function sendMail(recipients, subject, body)
+{
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+      recipients: `${recipients}`,
+      subject: `${subject}`,
+      body: `${body}`
+    })
+  })
+  .then(response => response.json())
+  .then(result => {
+      // Print result
+    console.log(recipients);
+    console.log(result);
+  })
+  return true;
 }
 
 function load_mailbox(mailbox) {
