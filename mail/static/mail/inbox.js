@@ -29,9 +29,9 @@ function compose_email() {
     const email_body = document.querySelector('#compose-body');
 
     if (!checkDetails(recipient, email_subject, email_body))
-    return false;
+      return false;
     else
-    load_mailbox("sent");
+      load_mailbox("sent");
   }
 }
 
@@ -91,11 +91,21 @@ function load_mailbox(mailbox) {
       for (let email in emails)
       { 
         // when the mailbox is sent then print the recipients id
-        if (mailbox === "sent")
+        if (mailbox === "sent"){
           console.log(emails[email].recipients);
+          var mail = document.createElement("div");
+          mail.innerHTML = `${emails[email].recipients} ${emails[email].subject} ${emails[email].timestamp}`
+          
+          document.getElementById('emails-view').append(mail);
+        }
         // otherwise print the sender id
-        else
+        else{
           console.log(emails[email].sender);
+          var mail = document.createElement("div");
+          mail.innerHTML = `${emails[email].sender} ${emails[email].subject} ${emails[email].timestamp}`
+          
+          document.getElementById('emails-view').append(mail);
+        }
       }
     })
 }
