@@ -1,3 +1,2 @@
-Now Email sending feature is working.
-But it can't catch an email that's not registered it is only showing that in 
-console so need to work on this. 
+Implement the feature on mails in which when we click on any mail
+it will show the sender, subject and body of the mail.
