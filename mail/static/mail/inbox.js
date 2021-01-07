@@ -130,22 +130,8 @@ function load_mailbox(mailbox) {
       }
     })
 }
-/*
-function openMail() {
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('a').forEach(aTag => {
-      aTag.onclick = function () {
-        const mailId = aTag.id;
-        fetch(`/emails/${mailId}`)
-        .then(response = response.json())
-        .then(email => {
-          console.log(email);
-      })
-      };
-  });
-  })
-}*/
 
+// This will take care of the Load Mail Feature
 window.addEventListener("hashchange", function () {
   // location.hash.match(/\d+/g) will get the mailId from the hash number
   // This is specifically used because it will get any number of digit from it
