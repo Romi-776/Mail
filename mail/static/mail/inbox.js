@@ -23,7 +23,8 @@ function compose_email() {
 
   document.querySelector("#compose-form").onsubmit = (event) => {
     event.preventDefault();
-    // Getting name of recipient, email body and subject
+
+    // Getting name of recipient, email, body and subject
     const recipient = document.querySelector('#compose-recipients');
     const email_subject = document.querySelector('#compose-subject');
     const email_body = document.querySelector('#compose-body');
@@ -85,27 +86,74 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
+  // fetching the mails in that mailbox
   fetch(`/emails/${mailbox}`)
+    // converting the received response into json
     .then(response => response.json())
     .then(emails => {
+      // getting each email from all the emails
       for (let email in emails)
       { 
-        // when the mailbox is sent then print the recipients id
+        // creating a div
+        const mail = document.createElement("div");
+        // creating an anchor tag
+        const link = document.createElement("a");
+        // giving that link a reference
+        link.href = `#${emails[email].id}`;
+        // setting the id of that tag
+        link.id = emails[email].id;
+
+        // getting all the info. about that mail 
+        const mailSub = emails[email].subject;
+        const sender = emails[email].sender;
+        const recipients = emails[email].recipients;
+        const timing = emails[email].timestamp;
+
+        // when the mailbox name is sent then print the recipients of that email
         if (mailbox === "sent"){
           console.log(emails[email].recipients);
-          var mail = document.createElement("div");
-          mail.innerHTML = `${emails[email].recipients} ${emails[email].subject} ${emails[email].timestamp}`
-          
+          const linkText = document.createTextNode(`${recipients} ${mailSub} ${timing}`);
+          link.appendChild(linkText);
+          mail.appendChild(link);
+
           document.getElementById('emails-view').append(mail);
         }
-        // otherwise print the sender id
+        // otherwise print the sender of that email
         else{
           console.log(emails[email].sender);
-          var mail = document.createElement("div");
-          mail.innerHTML = `${emails[email].sender} ${emails[email].subject} ${emails[email].timestamp}`
-          
+          const linkText = document.createTextNode(`${sender} ${mailSub} ${timing}`);
+          link.appendChild(linkText);
+          mail.appendChild(link);
+
           document.getElementById('emails-view').append(mail);
         }
       }
     })
 }
+/*
+function openMail() {
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('a').forEach(aTag => {
+      aTag.onclick = function () {
+        const mailId = aTag.id;
+        fetch(`/emails/${mailId}`)
+        .then(response = response.json())
+        .then(email => {
+          console.log(email);
+      })
+      };
+  });
+  })
+}*/
+
+window.addEventListener("hashchange", function () {
+  // location.hash.match(/\d+/g) will get the mailId from the hash number
+  // This is specifically used because it will get any number of digit from it
+  const mailId = parseInt(location.hash.match(/\d+/g));
+  console.log(mailId);
+  fetch(`/emails/${mailId}`)
+    .then(response => response.json())
+    .then(email => {
+      console.log(email);
+    });
+});
