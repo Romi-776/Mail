@@ -1,10 +1,11 @@
+// when the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
 
   // Use buttons to toggle between views
-  document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
-  document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
-  document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox')); // inbox is clicked
+  document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent')); // sent is clicked
+  document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive')); // archive is clicked
+  document.querySelector('#compose').addEventListener('click', compose_email); // compose is clicked
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -14,7 +15,10 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#specific-email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+
+  history.pushState({mailbox: "compose"}, "", "compose");
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -81,7 +85,10 @@ function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#specific-email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
+
+ history.pushState({mailbox: mailbox}, "", `${mailbox}`);
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -141,5 +148,41 @@ window.addEventListener("hashchange", function () {
     .then(response => response.json())
     .then(email => {
       console.log(email);
+      const mailbox = window.location.pathname;
+      history.pushState({ email: email }, "", `${mailbox}/${mailId}`);
+      load_mail(email);
     });
 });
+
+function load_mail(mailContent)
+{
+  // Show the specific mail and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#specific-email-view').style.display = 'block';
+  document.querySelector('#compose-view').style.display = 'none';
+
+  // Getting details from the emailContent
+  const from = mailContent["sender"];
+  const to = mailContent["recipients"];
+  const timing = mailContent["timestamp"];
+  const sub = mailContent["subject"];
+  const body = mailContent["body"];
+
+  // Adding this detail onto the screen
+  document.querySelector('#specific-email-view').innerHTML = `From: ${from} <br>To: ${to}<br>Subject: ${sub}<br>TimeStamp: ${timing}<br>${body}`;
+}
+
+// When the back button is clicked
+window.onpopstate = function (event) {
+  console.log("Event: " + JSON.stringify(event));
+  console.log("Event.State: " + JSON.stringify(event.state));
+  
+  if ("email" in event.state) {
+    console.dir(event.state.email);
+    load_mail(event.state.email);
+  }
+  else if ("compose" === event.state.mailbox)
+    compose_email();
+  else
+    load_mailbox(event.state.mailbox);
+}
