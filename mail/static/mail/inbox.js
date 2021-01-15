@@ -14,6 +14,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#specific-email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -81,6 +82,7 @@ function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#specific-email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
@@ -141,5 +143,24 @@ window.addEventListener("hashchange", function () {
     .then(response => response.json())
     .then(email => {
       console.log(email);
+      load_mail(email);
     });
 });
+
+function load_mail(mailContent)
+{
+  // Show the specific mail and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#specific-email-view').style.display = 'block';
+  document.querySelector('#compose-view').style.display = 'none';
+
+  // Getting details from the emailContent
+  const from = mailContent["sender"];
+  const to = mailContent["recipients"];
+  const timing = mailContent["timestamp"];
+  const sub = mailContent["subject"];
+  const body = mailContent["body"];
+
+  // Adding this detail onto the screen
+  document.querySelector('#specific-email-view').innerHTML = `From: ${from} <br>To: ${to}<br>Subject: ${sub}<br>TimeStamp: ${timing}<br>${body}`;
+}
