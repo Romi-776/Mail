@@ -1,6 +1,6 @@
 // when the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
-
+  console.log("When the Dom content is loaded");
   // Use buttons to toggle between views
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox')); // inbox is clicked
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent')); // sent is clicked
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function compose_email() {
+  console.log("Inside Compose mail function");
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -42,6 +43,7 @@ function compose_email() {
 
 function checkDetails(recipients, subject, body)
 {
+  console.log("Inside CheckDetails function");
   // When the user doesn't input a recipient name 
   // or subject or body then show an alert and 
   // don't go ahead 
@@ -64,6 +66,7 @@ function checkDetails(recipients, subject, body)
 
 function sendMail(recipients, subject, body)
 {
+  console.log("Inside sendMail function");
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
@@ -82,6 +85,7 @@ function sendMail(recipients, subject, body)
 }
 
 function load_mailbox(mailbox) {
+  console.log("Inside load mailbox function");
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
@@ -140,6 +144,8 @@ function load_mailbox(mailbox) {
 
 // This will take care of the Load Mail Feature
 window.addEventListener("hashchange", function () {
+  console.log("Inside hashchange event listener");
+
   // location.hash.match(/\d+/g) will get the mailId from the hash number
   // This is specifically used because it will get any number of digit from it
   const mailId = parseInt(location.hash.match(/\d+/g));
@@ -148,14 +154,18 @@ window.addEventListener("hashchange", function () {
     .then(response => response.json())
     .then(email => {
       console.log(email);
+      console.log("href = " + location.href);
+      console.log(`replacing this ${window.location.pathname} state to this "" `)
+      window.history.replaceState(`${window.location.pathname}`, null, "");
       const mailbox = window.location.pathname;
-      history.pushState({ email: email }, "", `${mailbox}/${mailId}`);
+      history.pushState({ email: email }, "", `/${mailId}`);
       load_mail(email);
     });
 });
 
 function load_mail(mailContent)
 {
+  console.log("Inside load mail function");
   // Show the specific mail and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#specific-email-view').style.display = 'block';
@@ -174,15 +184,22 @@ function load_mail(mailContent)
 
 // When the back button is clicked
 window.onpopstate = function (event) {
-  console.log("Event: " + JSON.stringify(event));
-  console.log("Event.State: " + JSON.stringify(event.state));
-  
-  if ("email" in event.state) {
-    console.dir(event.state.email);
-    load_mail(event.state.email);
+  console.log("Inside onpopstate function");
+  if (window.state !== null)
+  {
+    console.log("Event: " + JSON.stringify(event));
+    console.log("Event.State: " + JSON.stringify(event.state));
+    
+    if ("email" in event.state) {
+      console.dir(event.state.email);
+      load_mail(event.state.email);
+    }
+    else if ("compose" === event.state.mailbox)
+      compose_email();
+    else
+      load_mailbox(event.state.mailbox);
   }
-  else if ("compose" === event.state.mailbox)
-    compose_email();
-  else
-    load_mailbox(event.state.mailbox);
+  else {
+    load_mailbox("inbox");
+  }
 }
