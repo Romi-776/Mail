@@ -1,13 +1,22 @@
 Implement the feature on mails in which when we click on any mail
 it will show the sender, subject and body of the mail.
 
-Now I will make the above feature do something like below mentioned info.:
-    When I'm on my default page it will show the link like below:
-        127.0.0.1:8080/inbox
-    When I'm on my other mailbox then it will show the name of that
-    mailbox in place of inbox 
-    When I opened an email then it will show the link with the mailbox 
-    something just like the below written one:
-        127.0.0.1:8080/inbox/8
-    
-    So now Let's start the Work.
+Use this to get the hash number from the location.hash property
+.match(/\d+/g)
+for example:
+    var tName = 'arun_4874';
+    alert(tName.match(/\d+/));
+
+The metacharacter \d search for digits, which are also numbers. The match() method uses regular expressions to retrieve it results. When used the match() with \d, it returns the number 4874.
+
+However, the above method will return the first occurrence of the numbers. Therefore, if you have a string like arun_4874_541, using the above method, will return only 4874.
+
+To get all the numbers 4874 and 541, you’ll have to use g modifier, which means global (or perform a global search). Here’s how you should do this.
+
+<script>
+    var tName = 'arun_4874_541';
+    alert(tName.match(/\d+/g));
+</html>
+
+and after implementing the above written feature I should merge the
+branch with main branch and then push it online
