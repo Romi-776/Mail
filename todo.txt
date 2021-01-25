@@ -1,22 +1,11 @@
-Implement the feature on mails in which when we click on any mail
-it will show the sender, subject and body of the mail.
+To Do:
+1. Implement all the features without any link in the urlbox and after that Implement it with the urls.
+Done above thing
 
-Use this to get the hash number from the location.hash property
-.match(/\d+/g)
-for example:
-    var tName = 'arun_4874';
-    alert(tName.match(/\d+/));
-
-The metacharacter \d search for digits, which are also numbers. The match() method uses regular expressions to retrieve it results. When used the match() with \d, it returns the number 4874.
-
-However, the above method will return the first occurrence of the numbers. Therefore, if you have a string like arun_4874_541, using the above method, will return only 4874.
-
-To get all the numbers 4874 and 541, you’ll have to use g modifier, which means global (or perform a global search). Here’s how you should do this.
-
-<script>
-    var tName = 'arun_4874_541';
-    alert(tName.match(/\d+/g));
-</html>
-
-and after implementing the above written feature I should merge the
-branch with main branch and then push it online
+Next things to do is to improve the below written things:
+1.  Improve the CSS.
+2.  Improve the mail showing feature because when some content with a newline 
+    character in between occurs it doesn't show any type of newline in it instead
+    it merges the content with the content of the above line.
+3.  Add the back button support, i.e, when back button is clicked the user should 
+    go back to its previous page from where he came to the current page.
