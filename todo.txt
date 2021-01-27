@@ -1,3 +1,5 @@
+Currently I'm working on the css properties of the mail.
+
 To Do:
 1. Implement all the features without any link in the urlbox and after that Implement it with the urls.
 Done above thing
