@@ -106,7 +106,7 @@ function load_mailbox(mailbox) {
                 if (!emails[email].read)
                     mail.style.background = "white";                
                 else 
-                    mail.style.background = "rgb(196, 188, 188)";
+                    mail.style.background = "rgb(224, 222, 222)";
                 mail.style.border = "1px solid black";
                 document.querySelector('#emails-view').append(mail);
 
