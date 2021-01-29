@@ -94,19 +94,20 @@ function load_mailbox(mailbox) {
                 // creating a div
                 const mail = document.createElement("div");
                 mail.className = "card mailink";
-                
+                const rec = `${emails[email].recipients}`;
+                const sen = `${emails[email].sender}`;
                 if (mailbox == "sent") {
-                    mail.innerHTML = `${emails[email].recipients} | ${emails[email].subject} <br> ${emails[email].timestamp}`;
+                    mail.innerHTML = `${rec.bold()} ${emails[email].subject} | ${emails[email].timestamp}`;
                 }
                 else {
-                    mail.innerHTML = `${emails[email].sender} | ${emails[email].subject} <br> ${emails[email].timestamp}`;
+                    mail.innerHTML = `${sen.bold()} ${emails[email].subject} | ${emails[email].timestamp}`;
                 }
                 
                 if (!emails[email].read)
                     mail.style.background = "white";                
                 else 
-                    mail.style.background = "grey";
-
+                    mail.style.background = "rgb(196, 188, 188)";
+                mail.style.border = "1px solid black";
                 document.querySelector('#emails-view').append(mail);
 
                 // when a specific mail is clicked open that mail
